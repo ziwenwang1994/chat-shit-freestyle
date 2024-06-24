@@ -1,15 +1,10 @@
-import express from "express";
+import app from "./app.js";
+import { connectToDB } from "./db/connection.js";
 
-const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Add middlewares
-app.use(express.json());
-
-
-// GET
-app.get("/");
-// PUT
-// POST
-// DELETE
-
-app.listen(5000, () => console.log("Server Open"));
+connectToDB()
+  .then(() => {
+    app.listen(PORT, () => console.log("Server Open & Connected to DB"));
+  })
+  .catch((err) => console.error(err));
