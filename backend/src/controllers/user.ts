@@ -23,7 +23,7 @@ export const createUser = async (
 ) => {
   try {
     const { name, email, password } = req.body;
-    console.log(name, email, password);
+    
     const encodedPassword = await hash(password, 4);
     const user = new User({ name, email, password: encodedPassword });
     await user.save();
