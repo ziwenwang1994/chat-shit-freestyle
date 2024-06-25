@@ -1,6 +1,10 @@
-import { NextFunction, Request, Response } from "express";
+import e, { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
+import { createToken } from "../utils/token.js";
+import { cookie } from "express-validator";
+import { COOKIE_NAME } from "../const.js";
+import { resetCookies } from "../utils/cookies.js";
 
 export const getAllUsers = async (
   req: Request,
@@ -28,7 +32,10 @@ export const createUser = async (
     const encodedPassword = await hash(password, 4);
     const user = new User({ name, email, password: encodedPassword });
     await user.save();
-    return res.status(200).json({ message: "OK", id: user._id.toString() });
+
+    const token = createToken(user._id.toString(), email);
+    resetCookies(req, res, token);
+    return res.status(200).json({ message: "OK", user: user._id.toString() });
   } catch (error) {
     console.error(error);
     return res.status(404).json({ message: "ERROR", cause: error.message });
@@ -50,6 +57,9 @@ export const login = async (
     if (!isPasswordCorrect) {
       return res.status(403).send("Password is not correct");
     }
+
+    const token = createToken(user._id.toString(), email);
+    resetCookies(req, res, token);
     return res.status(200).json({ message: "OK", user: user._id.toString() });
   } catch (error) {
     console.error(error);
