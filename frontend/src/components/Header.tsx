@@ -4,15 +4,28 @@ import React, { useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Button } from "antd";
+import type { MenuProps } from 'antd';
+import { Menu } from 'antd';
 import { logout, setUser } from "@/lib/features/userSlice";
 import { usePathname, useRouter } from "next/navigation";
+import { MdMenu } from "react-icons/md";
 
 const links = [
   { name: "chat", path: "/chat" },
   { name: "log in", path: "/login" },
   { name: "new user", path: "/signup" },
 ];
-
+const items: MenuItem[] = [
+  {
+    key: 'sub1',
+    label: 'Navigation One',
+    icon: <MdMenu />,
+    children: [
+      { key: '1', label: 'Option 1' },
+      { key: '2', label: 'Option 2' },]
+    }
+  ];
+type MenuItem = Required<MenuProps>['items'][number];
 type User = {
   name: string;
   email: string;
@@ -54,20 +67,20 @@ const Header = (props: HeaderProps) => {
     if (user) dispatch(setUser(user));
   }, [user]);
   return (
-    <header className="h-[90px]">
-      <div className="flex items-center px-[16px] pt-[16px] justify-between">
+    <header className="min-h-[90px] sm:h-[90px] bg-black/20 sm:bg-none py-2">
+      <div className="block sm:flex items-center px-[16px] pt-[16px] sm:justify-between">
         <div>
           <Logo />
         </div>
         <nav
-          className="flex items-center transition-opacity duration-200 ease-in-out"
+          className="block sm:flex items-center transition-opacity duration-200 ease-in-out text-center sm:mt-0 mt-4"
           style={{
             opacity: visible ? "1" : "0",
           }}
         >
           {loginStatus && (
             <Link
-              className="text-white/80 mr-8 hover:text-white transition-colors duration-100 ease-in-out"
+              className="text-white/80 mr-8 sm:text-xl  text-sm  hover:text-white transition-colors duration-100 ease-in-out"
               href="/profile"
             >
               Hi, {name}!
