@@ -9,4 +9,5 @@ body
   padding: 0;
   background: #505050;
   color: #fefefe;
+  box-sizing: border-box;
 }
