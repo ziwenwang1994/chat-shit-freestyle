@@ -7,3 +7,8 @@ export const createToken = (id: string, email: string, expiresIn = "7d") => {
   });
   return token;
 };
+
+export const decodeToken = (token: string) => {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  return decoded;
+}
