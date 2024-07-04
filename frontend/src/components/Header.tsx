@@ -5,7 +5,7 @@ import Logo from "./Logo";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Button } from "antd";
 import { logout, setUser } from "@/lib/features/userSlice";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const links = [
   { name: "chat", path: "/chat" },
@@ -29,6 +29,7 @@ const Header = (props: HeaderProps) => {
   const username = useAppSelector((state) => state.user?.user?.name);
   const timer = useRef<any>(null);
   const [visible, seVisible] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setLoginStatus(isLoggedIn);
@@ -79,7 +80,9 @@ const Header = (props: HeaderProps) => {
             <Button
               className="font-bold uppercase bg-sky-950 text-white border-none"
               onClick={() => {
-                dispatch(logout());
+                dispatch(logout()).then(res => {
+                  if (!res.type?.includes("/rejected")) router.replace("/");
+                });
               }}
             >
               logout
