@@ -5,6 +5,7 @@ import Logo from "./Logo";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Button } from "antd";
 import { logout, setUser } from "@/lib/features/userSlice";
+import { usePathname } from "next/navigation";
 
 const links = [
   { name: "chat", path: "/chat" },
@@ -20,6 +21,7 @@ type HeaderProps = {
   user: User;
 } | null;
 const Header = (props: HeaderProps) => {
+  const location = usePathname();
   const { user } = props || {};
   const [loginStatus, setLoginStatus] = useState(!!user?.email);
   const [name, setName] = useState(user?.name || "");
@@ -49,32 +51,26 @@ const Header = (props: HeaderProps) => {
     if (user) dispatch(setUser(user));
   }, [user, dispatch]);
   return (
-    <header className="h-[90px]  bg-black/20 sm:bg-none py-2">
-      <div className="block sm:flex items-center px-[16px] pt-[16px] sm:justify-between">
+    <header className="h-[90px] bg-black/20 py-2">
+      <div className="flex items-center px-[16px] pt-[16px] justify-between">
         <div>
           <Logo />
         </div>
         <nav
-          className="block sm:flex items-center transition-opacity duration-200 ease-in-out text-center sm:mt-0 mt-4"
+          className="flex items-center transition-opacity duration-200 ease-in-out text-center sm:mt-0 mt-4"
           style={{
             opacity: visible ? "1" : "0",
           }}
         >
-          {loginStatus && (
-            <Link
-              className="text-white/80 mr-8 sm:text-xl text-sm  hover:text-white transition-colors 
-              duration-100 ease-in-out w-[60px] overflow-hidden text-nowrap text-ellipsis"
-              href="/profile"
-            >
-              Hi, {name}!
-            </Link>
-          )}
           {isLoggedIn && links.map((link) => (
             <Link
               className="mx-1 px-2 py-1 rounded font-bold uppercase hover:bg-black/90 transition-all duration-100 
               ease-in-out"
               href={link.path}
               key={link.name}
+              style={{
+                background: location === link.path ? "#252525" : ""
+              }}
             >
               {link.name}
             </Link>

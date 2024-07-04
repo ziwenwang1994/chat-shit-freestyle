@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="mt-8">
       <section className="flex justify-center py-8">
-        <Card className="w-[600px] bg-[#252525] border-none text-slate-100 my-auto">
+        <Card className="w-full mx-[16px] md:w-[600px] md:mx-0 md:bg-[#252525] bg-transparent border-none text-slate-100 my-auto">
           <h2 className="text-[36px] font-bold leading-tight py-5 text-center">Welcome to Chat Freestyle!</h2>
           <p className="text-[16px] text-slate-300">
             Your go-to chat bot for personalized assistance and engaging
@@ -25,7 +25,7 @@ export default function Home() {
           src="/assets/robot_hand.png"
           width={1200}
           height={1200}
-          className="w-[700px] h-[700px]"
+          className="w-[700px] h-[700px] hidden md:block"
         />
       </section>
     </div>
