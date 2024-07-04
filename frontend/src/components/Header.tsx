@@ -4,28 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Button } from "antd";
-import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
 import { logout, setUser } from "@/lib/features/userSlice";
-import { usePathname, useRouter } from "next/navigation";
-import { MdMenu } from "react-icons/md";
 
 const links = [
   { name: "chat", path: "/chat" },
-  { name: "log in", path: "/login" },
-  { name: "new user", path: "/signup" },
 ];
-const items: MenuItem[] = [
-  {
-    key: 'sub1',
-    label: 'Navigation One',
-    icon: <MdMenu />,
-    children: [
-      { key: '1', label: 'Option 1' },
-      { key: '2', label: 'Option 2' },]
-    }
-  ];
-type MenuItem = Required<MenuProps>['items'][number];
+
 type User = {
   name: string;
   email: string;
@@ -37,8 +21,6 @@ type HeaderProps = {
 } | null;
 const Header = (props: HeaderProps) => {
   const { user } = props || {};
-  const location = usePathname();
-
   const [loginStatus, setLoginStatus] = useState(!!user?.email);
   const [name, setName] = useState(user?.name || "");
   const isLoggedIn = useAppSelector((state) => state.user?.isLoggedIn);
@@ -65,9 +47,9 @@ const Header = (props: HeaderProps) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (user) dispatch(setUser(user));
-  }, [user]);
+  }, [user, dispatch]);
   return (
-    <header className="min-h-[90px] sm:h-[90px] bg-black/20 sm:bg-none py-2">
+    <header className="h-[90px]  bg-black/20 sm:bg-none py-2">
       <div className="block sm:flex items-center px-[16px] pt-[16px] sm:justify-between">
         <div>
           <Logo />
@@ -80,24 +62,19 @@ const Header = (props: HeaderProps) => {
         >
           {loginStatus && (
             <Link
-              className="text-white/80 mr-8 sm:text-xl  text-sm  hover:text-white transition-colors duration-100 ease-in-out"
+              className="text-white/80 mr-8 sm:text-xl text-sm  hover:text-white transition-colors 
+              duration-100 ease-in-out w-[60px] overflow-hidden text-nowrap text-ellipsis"
               href="/profile"
             >
               Hi, {name}!
             </Link>
           )}
-          {links.map((link) => (
+          {isLoggedIn && links.map((link) => (
             <Link
-              className="mx-1 px-2 py-1 rounded font-bold uppercase hover:bg-black/90 transition-all duration-100 ease-in-out"
+              className="mx-1 px-2 py-1 rounded font-bold uppercase hover:bg-black/90 transition-all duration-100 
+              ease-in-out"
               href={link.path}
               key={link.name}
-              style={{
-                display:
-                  ["log in", "new user"].includes(link.name) && loginStatus
-                    ? "none"
-                    : "",
-                    background: location === link.path ? "rgba(0,0,0,0.2)" : ""
-              }}
             >
               {link.name}
             </Link>

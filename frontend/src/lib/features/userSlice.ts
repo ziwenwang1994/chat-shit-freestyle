@@ -41,6 +41,7 @@ export const useSlice = createSlice({
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = null;
       state.isLoggedIn = false;
+      window.location.href = "/";
     });
     builder.addCase(signUp.fulfilled, (state, action) => {
       const user = action.payload.user;

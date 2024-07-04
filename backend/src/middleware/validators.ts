@@ -15,6 +15,10 @@ export const signupValidator = [
   ...loginValidator
 ];
 
+export const chatCompletionValidator = [
+  body("message").notEmpty().withMessage("Message is required"),
+];
+
 export const validate = (validations: ValidationChain[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     for (const validation of validations) {

@@ -9,8 +9,7 @@ export const authenticator = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.signedCookies?.auth_token || req.headers.authorization;
-   
+    const token = req.signedCookies?.auth_token || req.cookies?.auth_token || req.headers.authorization;
     if (token) {
       const data = decodeToken(token);
       if (

@@ -22,6 +22,9 @@ const httpXhr: {
     name: string;
   }) => Promise<any>;
   logout: () => Promise<any>;
+  sendChatRequest: (params: {
+    message: string;
+  }) => Promise<any>;
 } = {
   async fetchUserInfo() {
     return await xhr.get("/users/me");
@@ -39,6 +42,9 @@ const httpXhr: {
   },
   async signup({ email, password, name }) {
     return await xhr.post("/users/signup", { email, password, name });
+  },
+  async sendChatRequest({ message }) {
+    return await xhr.post("/chats/new", { message });
   },
 };
 
