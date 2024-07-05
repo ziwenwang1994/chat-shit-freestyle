@@ -23,9 +23,9 @@ export default function Home() {
         <Image
           alt=""
           src="/assets/robot_hand.png"
-          width={1200}
+          width={900}
           height={1200}
-          className="w-[700px] h-[700px] hidden md:block"
+          className="w-[500px] h-[700px] hidden md:block"
         />
       </section>
     </div>
