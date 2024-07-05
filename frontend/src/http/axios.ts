@@ -14,6 +14,7 @@ xhr.interceptors.response.use(function (response: AxiosResponse) {
 
 const httpXhr: {
   fetchUserInfo: () => Promise<any>;
+  getChatHistory: () => Promise<any>;
   fetchUserInfoOnServer: (header: { authorization: string }) => Promise<any>;
   login: (params: { email: string; password: string }) => Promise<any>;
   signup: (params: {
@@ -22,9 +23,8 @@ const httpXhr: {
     name: string;
   }) => Promise<any>;
   logout: () => Promise<any>;
-  sendChatRequest: (params: {
-    message: string;
-  }) => Promise<any>;
+  sendChatRequest: (params: { message: string }) => Promise<any>;
+  clearChatHistory: () => Promise<any>;
 } = {
   async fetchUserInfo() {
     return await xhr.get("/users/me");
@@ -45,6 +45,12 @@ const httpXhr: {
   },
   async sendChatRequest({ message }) {
     return await xhr.post("/chats/new", { message });
+  },
+  async getChatHistory() {
+    return await xhr.get("/chats/history");
+  },
+  async clearChatHistory() {
+    return await xhr.delete("/chats/history");
   },
 };
 
