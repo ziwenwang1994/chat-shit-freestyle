@@ -18,8 +18,9 @@ app.use(
       "http://localhost:3000",
       "http://127.0.0.1:5000",
       "http://localhost:5000",
-      "https://chat-shit-freestyle-otx89oh7g-svens-projects-b5f75a36.vercel.app",
+      "https://chat-shit-freestyle-fe.vercel.app",
     ],
+    methods: ["GET", "POST", "DELETE", "PUT", "HEAD", "PATCH"],
     credentials: true,
     optionsSuccessStatus: 200,
   })
