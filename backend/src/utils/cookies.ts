@@ -9,5 +9,6 @@ export const resetCookies = (req: Request, res: Response, token: string) => {
     path: "/",
     expires,
     httpOnly: true,
+    sameSite: "none"
   });
 };
