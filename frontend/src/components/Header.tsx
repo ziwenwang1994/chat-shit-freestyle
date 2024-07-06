@@ -7,9 +7,7 @@ import { Button } from "antd";
 import { logout, setUser } from "@/lib/features/userSlice";
 import { usePathname, useRouter } from "next/navigation";
 
-const links = [
-  { name: "chat", path: "/chat" },
-];
+const links = [{ name: "chat", path: "/chat" }];
 
 type User = {
   name: string;
@@ -18,11 +16,11 @@ type User = {
 } | null;
 
 type HeaderProps = {
-  user: User;
-} | null;
+  user: User | null;
+};
 const Header = (props: HeaderProps) => {
   const location = usePathname();
-  const { user } = props || {};
+  const user: User = props.user;
   const [loginStatus, setLoginStatus] = useState(!!user?.email);
   const [name, setName] = useState(user?.name || "");
   const isLoggedIn = useAppSelector((state) => state.user?.isLoggedIn);
@@ -49,7 +47,7 @@ const Header = (props: HeaderProps) => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (user) dispatch(setUser(user));
+    dispatch(setUser(user));
   }, [user, dispatch]);
   return (
     <header className="h-[90px] bg-black/20 py-2">
@@ -63,24 +61,25 @@ const Header = (props: HeaderProps) => {
             opacity: visible ? "1" : "0",
           }}
         >
-          {isLoggedIn && links.map((link) => (
-            <Link
-              className="mx-1 px-2 py-1 rounded font-bold uppercase hover:bg-black/90 transition-all duration-100 
+          {isLoggedIn &&
+            links.map((link) => (
+              <Link
+                className="mx-1 px-2 py-1 rounded font-bold uppercase hover:bg-black/90 transition-all duration-100 
               ease-in-out"
-              href={link.path}
-              key={link.name}
-              style={{
-                background: location === link.path ? "#252525" : ""
-              }}
-            >
-              {link.name}
-            </Link>
-          ))}
+                href={link.path}
+                key={link.name}
+                style={{
+                  background: location === link.path ? "#252525" : "",
+                }}
+              >
+                {link.name}
+              </Link>
+            ))}
           {loginStatus && (
             <Button
               className="font-bold uppercase bg-sky-950 text-white border-none"
               onClick={() => {
-                dispatch(logout()).then(res => {
+                dispatch(logout()).then((res) => {
                   if (!res.type?.includes("/rejected")) router.replace("/");
                 });
               }}

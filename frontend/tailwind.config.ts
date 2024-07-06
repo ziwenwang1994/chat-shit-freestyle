@@ -17,6 +17,12 @@ const config: Config = {
         inter: ["--font-inter", "sans-serif"],
         roboto: ["--font-roboto", "sans-serif"],
       },
+      keyframes: {
+        showup: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+      },
     },
   },
   plugins: [],

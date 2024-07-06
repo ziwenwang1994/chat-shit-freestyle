@@ -11,7 +11,6 @@ export default async function ServerHeader(): Promise<JSX.Element> {
     setAuthorization(token)
     try {
       const data = await httpXhr.fetchUserInfo();
-
       user = data?.user || null;
     } catch (error) {
       user = null;

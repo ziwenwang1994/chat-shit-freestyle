@@ -6,6 +6,7 @@ import { setCookie, deleteCookie } from 'cookies-next';
 interface UserState {
   user: User | null;
   isLoggedIn: boolean;
+  initialized: boolean;
 }
 
 type User = {
@@ -17,15 +18,17 @@ type User = {
 const initialState: UserState = {
   user: null,
   isLoggedIn: false,
+  initialized: false
 };
 
 export const useSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: { payload: User}) => {
+    setUser: (state, action: { payload: User | null}) => {
       state.user = action.payload;
       state.isLoggedIn = !!state.user;
+      state.initialized = true;
     }
   },
   extraReducers(builder) {

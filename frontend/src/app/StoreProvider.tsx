@@ -11,9 +11,7 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
     // Create the store instance the first time this renders
     storeRef.current = GlobalStore();
     const token = getCookie("auth_token");
-    console.log(getCookie, token);
     if(token){
-      console.log(token);
       setAuthorization(token);
     }
   }

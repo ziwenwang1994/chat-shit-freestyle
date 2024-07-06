@@ -35,7 +35,7 @@ export default function SignUpForm() {
       }
       router.replace("/");
     });
-  };
+  }; 
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
     errorInfo

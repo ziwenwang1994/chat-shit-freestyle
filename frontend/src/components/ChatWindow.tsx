@@ -6,10 +6,7 @@ import { RxAvatar } from "react-icons/rx";
 import ChatItem from "./ChatItem";
 import { BiSend } from "react-icons/bi";
 import httpXhr from "@/http/axios";
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
+import { Message, Messages } from "../../types";
 
 function ChatWindow() {
   const user = useAppSelector((state) => state.user.user);
@@ -18,13 +15,13 @@ function ChatWindow() {
   const isCtrPressed = useRef(false);
   const isLoadingChat = useRef(false);
   const [errorText, setErrorText] = useState("");
-  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [chatMessages, setChatMessages] = useState<Messages>([]);
 
   useEffect(() => {
     isLoadingChat.current = true;
     httpXhr
       .getChatHistory()
-      .then((res: { chats: Message[] }) => {
+      .then((res: { chats: Messages }) => {
         setChatMessages(res.chats || []);
       })
       .catch((err) => {
@@ -43,7 +40,7 @@ function ChatWindow() {
     setChatMessages((messages) => [...messages, message]);
     httpXhr
       .sendChatRequest({ message: content })
-      .then((res: { chats: Message[] }) => {
+      .then((res: { chats: Messages }) => {
         setChatMessages(res.chats || []);
       })
       .catch((err) => {
@@ -73,7 +70,7 @@ function ChatWindow() {
   function clearChat() {
     httpXhr
       .clearChatHistory()
-      .then((res: { chats: Message[] }) => {
+      .then((res: { chats: Messages }) => {
         setChatMessages(res.chats || []);
       })
       .catch((err) => {
@@ -105,8 +102,10 @@ function ChatWindow() {
       <div className="md:flex xs:hidden sm:hidden hidden flex-[0.2] flex-col">
         <div className="flex w-full h-[60vh] bg-[rgb(17,29,39)] rounded-xl flex-col mx-3 overflow-hidden p-4">
           {(user?.name && (
-            <Avatar className="mx-auto my-2 bg-white text-black font-[600] text-[24px] w-[44px] h-[44px]
-             uppercase">
+            <Avatar
+              className="mx-auto my-2 bg-white text-black font-[600] text-[24px] w-[44px] h-[44px]
+             uppercase"
+            >
               {user?.name[0]}
             </Avatar>
           )) || (
@@ -120,13 +119,13 @@ function ChatWindow() {
               You can ask come questions related to Knowledge, Business,
               Advices, Education, etc. But avoid to share personal information.
             </p>
-            <Button
+            <button
               onClick={clearChat}
               className="w-[200px] my-auto font-[700] rounded mx-auto bg-red-300 border-none hover:bg-red-400
-               uppercase text-white"
+               uppercase text-white px-4 py-2 text-sm"
             >
               Clear Conversation
-            </Button>
+            </button>
           </article>
         </div>
       </div>
@@ -166,11 +165,11 @@ function ChatWindow() {
           />
         </div>
         <Button
-              onClick={clearChat}
-              className="w-full md:hidden mt-4 font-[500] rounded mx-auto bg-red-300 border-none uppercase text-white"
-            >
-              Clear Conversation
-            </Button>
+          onClick={clearChat}
+          className="w-full md:hidden mt-4 font-[500] rounded mx-auto bg-red-300 border-none uppercase text-white"
+        >
+          Clear Conversation
+        </Button>
       </div>
     </div>
   );

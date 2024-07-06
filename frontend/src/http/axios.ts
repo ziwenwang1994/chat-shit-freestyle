@@ -1,5 +1,8 @@
 import axios, { AxiosResponse } from "axios";
+import { getCookie } from "cookies-next";
 
+
+const token = getCookie("auth_token") || "";
 const xhr = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   timeout: 20000,
@@ -18,6 +21,8 @@ export function setAuthorization(token: string) {
     delete xhr.defaults.headers.common["Authorization"];
   }
 }
+
+setAuthorization(token);
 
 const httpXhr: {
   fetchUserInfo: () => Promise<any>;
