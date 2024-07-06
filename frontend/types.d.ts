@@ -4,3 +4,9 @@ export type Message = {
 }
 
 export type Messages = Message[];
+
+export type User = {
+    name: string;
+    email: string;
+    id: string;
+  } | null;

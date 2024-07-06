@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { GlobalStore, AppStore } from '@/lib/store';
 import { getCookie } from 'cookies-next';
 import { setAuthorization } from '@/http/axios';
+import useInit from '@/lib/hooks/useInit';
 
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
   const storeRef = useRef<AppStore>();
@@ -14,5 +15,6 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
       setAuthorization(token);
     }
   }
+  useInit(storeRef);
   return <Provider store={storeRef.current}>{children}</Provider>;
 }

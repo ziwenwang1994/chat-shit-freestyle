@@ -8,14 +8,10 @@ import { logout, setUser } from "@/lib/features/userSlice";
 import { usePathname, useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
 import httpXhr, { setAuthorization } from "@/http/axios";
+import { User } from "../../types";
 
 const links = [{ name: "chat", path: "/chat" }];
 
-type User = {
-  name: string;
-  email: string;
-  id: string;
-} | null;
 
 const Header = () => {
   const location = usePathname();

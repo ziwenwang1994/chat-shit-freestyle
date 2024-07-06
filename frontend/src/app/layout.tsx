@@ -4,6 +4,7 @@ import "./globals.css";
 import StoreProvider from "./StoreProvider";
 import PageTransition from "@/components/PageTransition";
 import Header from "@/components/Header";
+import useInit from "@/lib/hooks/useInit";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const robotoSlab = Roboto_Slab({
