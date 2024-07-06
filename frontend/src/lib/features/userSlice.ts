@@ -1,8 +1,8 @@
 import httpXhr, { setAuthorization } from "@/http/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { setCookie, deleteCookie } from 'cookies-next';
-
+import { setCookie, deleteCookie } from "cookies-next";
+const ONE_MONTH = 3600 * 24 * 30;
 interface UserState {
   user: User | null;
   isLoggedIn: boolean;
@@ -18,18 +18,18 @@ type User = {
 const initialState: UserState = {
   user: null,
   isLoggedIn: false,
-  initialized: false
+  initialized: false,
 };
 
 export const useSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: { payload: User | null}) => {
+    setUser: (state, action: { payload: User | null }) => {
       state.user = action.payload;
       state.isLoggedIn = !!state.user;
       state.initialized = true;
-    }
+    },
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
@@ -37,7 +37,7 @@ export const useSlice = createSlice({
       const token = action.payload.accessToken;
       state.user = user || null;
       state.isLoggedIn = !!user;
-      setCookie("auth_token", token);
+      setCookie("auth_token", token, { maxAge: ONE_MONTH });
       setAuthorization(token);
     });
     builder.addCase(getProfile.fulfilled, (state, action) => {
@@ -55,7 +55,7 @@ export const useSlice = createSlice({
       const token = action.payload.accessToken;
       state.user = user || null;
       state.isLoggedIn = !!user;
-      setCookie("auth_token", token);
+      setCookie("auth_token", token, { maxAge: ONE_MONTH });
       setAuthorization(token);
     });
   },
@@ -77,14 +77,10 @@ const signUp = createAsyncThunk(
   }
 );
 
-
-const logout = createAsyncThunk(
-  "user/logout",
-  async () => {
-    const response = await httpXhr.logout();
-    return response;
-  }
-);
+const logout = createAsyncThunk("user/logout", async () => {
+  const response = await httpXhr.logout();
+  return response;
+});
 
 const getProfile = createAsyncThunk("user/me", async () => {
   const response = await httpXhr.fetchUserInfo();

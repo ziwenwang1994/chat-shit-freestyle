@@ -8,7 +8,6 @@ import { setAuthorization } from '@/http/axios';
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
   const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
-    // Create the store instance the first time this renders
     storeRef.current = GlobalStore();
     const token = getCookie("auth_token");
     if(token){
