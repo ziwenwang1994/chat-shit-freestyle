@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Roboto_Slab, Inter } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
-import ServerHeader from "@/components/ServerHeader";
 import PageTransition from "@/components/PageTransition";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const robotoSlab = Roboto_Slab({
@@ -28,7 +28,7 @@ export default function RootLayout({
         className={`${robotoSlab.className} ${robotoSlab.variable} ${inter.variable}`}
       >
         <StoreProvider>
-          <ServerHeader />
+          <Header />
           <PageTransition>{children}</PageTransition>
         </StoreProvider>
       </body>

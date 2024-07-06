@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Button } from "antd";
 import { logout, setUser } from "@/lib/features/userSlice";
 import { usePathname, useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
+import httpXhr, { setAuthorization } from "@/http/axios";
 
 const links = [{ name: "chat", path: "/chat" }];
 
@@ -15,40 +17,33 @@ type User = {
   id: string;
 } | null;
 
-type HeaderProps = {
-  user: User | null;
-};
-const Header = (props: HeaderProps) => {
+const Header = () => {
   const location = usePathname();
-  const user: User = props.user;
-  const [loginStatus, setLoginStatus] = useState(!!user?.email);
-  const [name, setName] = useState(user?.name || "");
   const isLoggedIn = useAppSelector((state) => state.user?.isLoggedIn);
-  const username = useAppSelector((state) => state.user?.user?.name);
-  const timer = useRef<any>(null);
-  const [visible, seVisible] = useState(false);
+  const initialized = useAppSelector((state) => state.user?.initialized);
   const router = useRouter();
+  const [serverUser, setServerUser] = useState<User>(null);
 
   useEffect(() => {
-    setLoginStatus(isLoggedIn);
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    setName(username || "");
-  }, [username]);
-
-  useEffect(() => {
-    timer.current = setTimeout(() => {
-      seVisible(true);
-      timer.current = null;
-    });
-    return () => clearTimeout(timer.current);
+    const token = getCookie("auth_token");
+    if (token) {
+      setAuthorization(token);
+      try {
+        httpXhr.fetchUserInfo().then((data: { user: User }) => {
+          setServerUser(data?.user || null);
+        });
+      } catch (error) {
+        setUser(null);
+        console.error(error);
+      }
+    }
   }, []);
 
   const dispatch = useAppDispatch();
+
   useEffect(() => {
-    dispatch(setUser(user));
-  }, [user, dispatch]);
+    dispatch(setUser(serverUser));
+  }, [serverUser, dispatch]);
   return (
     <header className="h-[90px] bg-black/20 py-2">
       <div className="flex items-center px-[16px] pt-[16px] justify-between">
@@ -58,7 +53,7 @@ const Header = (props: HeaderProps) => {
         <nav
           className="flex items-center transition-opacity duration-200 ease-in-out text-center sm:mt-0 mt-4"
           style={{
-            opacity: visible ? "1" : "0",
+            opacity: initialized ? "1" : "0",
           }}
         >
           {isLoggedIn &&
@@ -75,7 +70,7 @@ const Header = (props: HeaderProps) => {
                 {link.name}
               </Link>
             ))}
-          {loginStatus && (
+          {isLoggedIn && (
             <Button
               className="font-bold uppercase bg-sky-950 text-white border-none"
               onClick={() => {
