@@ -11,7 +11,16 @@ export const getAllUsers = async (
 ) => {
   try {
     const users = await User.find();
-    return res.status(200).json({ message: "OK", users });
+    return res
+      .status(200)
+      .json({
+        message: "OK",
+        users: users.map((el) => ({
+          id: el._id.toString(),
+          name: el.name,
+          email: el.email,
+        })),
+      });
   } catch (error) {
     console.error(error);
     return res.status(404).json({ message: "ERROR", cause: error.message });
@@ -56,8 +65,10 @@ export const createUser = async (
     const token = createToken(user._id.toString(), email);
     resetCookies(req, res, token);
 
-    const userInfo = { email, id: user._id.toString(), name: user.name};
-    return res.status(200).json({ message: "OK", user: userInfo });
+    const userInfo = { email, id: user._id.toString(), name: user.name };
+    return res
+      .status(200)
+      .json({ message: "OK", user: userInfo, accessToken: token });
   } catch (error) {
     console.error(error);
     return res.status(404).json({ message: "ERROR", cause: error.message });
@@ -81,9 +92,10 @@ export const login = async (
     }
 
     const token = createToken(user._id.toString(), email);
-    resetCookies(req, res, token);
-    const userInfo = { email, id: user._id.toString(), name: user.name};
-    return res.status(200).json({ message: "OK", user: userInfo });
+    const userInfo = { email, id: user._id.toString(), name: user.name };
+    return res
+      .status(200)
+      .json({ message: "OK", user: userInfo, accessToken: token });
   } catch (error) {
     console.error(error);
     return res.status(404).json({ message: "ERROR", cause: error.message });

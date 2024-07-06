@@ -3,7 +3,6 @@ import axios, { AxiosResponse } from "axios";
 const xhr = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   timeout: 20000,
-  withCredentials: true,
 });
 
 xhr.interceptors.response.use(function (response: AxiosResponse) {
@@ -11,6 +10,14 @@ xhr.interceptors.response.use(function (response: AxiosResponse) {
   console.error(response.data);
   return response;
 });
+
+export function setAuthorization(token: string) {
+  if (token) {
+    xhr.defaults.headers.common.Authorization = `Bearer ${token}`;
+  } else {
+    delete xhr.defaults.headers.common["Authorization"];
+  }
+}
 
 const httpXhr: {
   fetchUserInfo: () => Promise<any>;

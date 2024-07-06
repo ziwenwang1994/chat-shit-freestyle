@@ -9,7 +9,7 @@ export const authenticator = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.signedCookies?.auth_token || req.cookies?.auth_token || req.headers.authorization;
+    const token = req.headers.authorization?.split(" ")?.[1] || "";
     if (token) {
       const data = decodeToken(token);
       if (
@@ -31,8 +31,8 @@ export const authenticator = async (
       }
     }
     return res
-      .status(404)
-      .json({ message: "ERROR", cause: "Cannot find the user." });
+      .status(400)
+      .json({ message: "ERROR", cause: "Cannot find the Authorization." });
   } catch (error) {
     return res.status(404).json({ message: "ERROR", cause: error.message });
   }

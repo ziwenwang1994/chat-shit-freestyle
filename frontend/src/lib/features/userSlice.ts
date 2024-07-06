@@ -1,6 +1,7 @@
-import httpXhr from "@/http/axios";
+import httpXhr, { setAuthorization } from "@/http/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { setCookie, deleteCookie } from 'cookies-next';
 
 interface UserState {
   user: User | null;
@@ -30,8 +31,11 @@ export const useSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
       const user = action.payload.user;
+      const token = action.payload.accessToken;
       state.user = user || null;
       state.isLoggedIn = !!user;
+      setCookie("auth_token", token);
+      setAuthorization(token);
     });
     builder.addCase(getProfile.fulfilled, (state, action) => {
       const user = action.payload.user;
@@ -41,11 +45,15 @@ export const useSlice = createSlice({
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = null;
       state.isLoggedIn = false;
+      deleteCookie("auth_token");
     });
     builder.addCase(signUp.fulfilled, (state, action) => {
       const user = action.payload.user;
+      const token = action.payload.accessToken;
       state.user = user || null;
       state.isLoggedIn = !!user;
+      setCookie("auth_token", token);
+      setAuthorization(token);
     });
   },
 });
