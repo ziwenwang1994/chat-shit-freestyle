@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token.js";
-import { resetCookies } from "../utils/cookies.js";
 
 export const getAllUsers = async (
   req: Request,
@@ -61,10 +60,7 @@ export const createUser = async (
     const encodedPassword = await hash(password, 4);
     const user = new User({ name, email, password: encodedPassword });
     await user.save();
-
     const token = createToken(user._id.toString(), email);
-    resetCookies(req, res, token);
-
     const userInfo = { email, id: user._id.toString(), name: user.name };
     return res
       .status(200)
@@ -96,20 +92,6 @@ export const login = async (
     return res
       .status(200)
       .json({ message: "OK", user: userInfo, accessToken: token });
-  } catch (error) {
-    console.error(error);
-    return res.status(404).json({ message: "ERROR", cause: error.message });
-  }
-};
-
-export const logout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    res.clearCookie("auth_token");
-    return res.status(200).json({ message: "OK" });
   } catch (error) {
     console.error(error);
     return res.status(404).json({ message: "ERROR", cause: error.message });

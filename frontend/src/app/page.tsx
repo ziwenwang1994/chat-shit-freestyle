@@ -1,7 +1,5 @@
 import LinksArea from "@/components/LinksArea";
-import { Card } from "antd";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
   return (

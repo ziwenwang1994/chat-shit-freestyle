@@ -70,9 +70,8 @@ const Header = () => {
             <Button
               className="font-bold uppercase bg-sky-950 text-white border-none"
               onClick={() => {
-                dispatch(logout()).then((res) => {
-                  if (!res.type?.includes("/rejected")) router.replace("/");
-                });
+                dispatch(logout());
+                router.replace("/")
               }}
             >
               logout

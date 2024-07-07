@@ -3,11 +3,16 @@
 @tailwind utilities;
 
 html,
-body
-{
+body {
   margin: 0;
   padding: 0;
-  background: #505050;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(34, 61, 84, 1) 35%,
+    rgba(44, 68, 69, 1) 100%
+  );
   color: #fefefe;
   box-sizing: border-box;
 }

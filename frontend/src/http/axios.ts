@@ -34,7 +34,6 @@ const httpXhr: {
     password: string;
     name: string;
   }) => Promise<any>;
-  logout: () => Promise<any>;
   sendChatRequest: (params: { message: string }) => Promise<any>;
   clearChatHistory: () => Promise<any>;
 } = {
@@ -48,9 +47,6 @@ const httpXhr: {
   },
   async login({ email, password }) {
     return await xhr.post("/users/login", { email, password });
-  },
-  async logout() {
-    return await xhr.post("/users/logout");
   },
   async signup({ email, password, name }) {
     return await xhr.post("/users/signup", { email, password, name });

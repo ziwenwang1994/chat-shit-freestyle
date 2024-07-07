@@ -30,6 +30,11 @@ export const useSlice = createSlice({
       state.isLoggedIn = !!state.user;
       state.initialized = true;
     },
+    logout: (state) => {
+      deleteCookie("auth_token");
+      state.user = null;
+      state.isLoggedIn = !!state.user;
+    },
   },
   extraReducers(builder) {
     builder.addCase(login.fulfilled, (state, action) => {
@@ -44,11 +49,6 @@ export const useSlice = createSlice({
       const user = action.payload.user;
       state.user = user || null;
       state.isLoggedIn = !!user;
-    });
-    builder.addCase(logout.fulfilled, (state, action) => {
-      state.user = null;
-      state.isLoggedIn = false;
-      deleteCookie("auth_token");
     });
     builder.addCase(signUp.fulfilled, (state, action) => {
       const user = action.payload.user;
@@ -76,18 +76,12 @@ const signUp = createAsyncThunk(
     return response;
   }
 );
-
-const logout = createAsyncThunk("user/logout", async () => {
-  const response = await httpXhr.logout();
-  return response;
-});
-
 const getProfile = createAsyncThunk("user/me", async () => {
   const response = await httpXhr.fetchUserInfo();
   return response;
 });
 
-export { login, getProfile, logout, signUp };
+export { login, getProfile, signUp };
 
-export const { setUser } = useSlice.actions;
+export const { setUser, logout } = useSlice.actions;
 export default useSlice.reducer;
