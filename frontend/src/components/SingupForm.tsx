@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/lib/hooks";
 import type { FormProps } from "antd";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type FieldType = {
   email?: string;
@@ -16,6 +17,7 @@ export default function SignUpForm() {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [leaving, setLeaving] = useState(false);
   const onFinish: FormProps<FieldType>["onFinish"] = (values: {
     email?: string;
     password?: string;
@@ -35,7 +37,7 @@ export default function SignUpForm() {
       }
       router.replace("/");
     });
-  }; 
+  };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
     errorInfo
@@ -43,12 +45,21 @@ export default function SignUpForm() {
     console.error("Failed:", errorInfo);
   };
 
+  const leave = () => {
+    setLeaving(true);
+  };
+
+  useEffect(() => {
+    if (leaving) setTimeout(() => router.push("/login"), 500);
+  }, [leaving, router]);
+
   return (
     <Form
+      key="signup"
       name="basic"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
+      style={{ maxWidth: 600, display: leaving ? "none" : "" }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
@@ -99,6 +110,9 @@ export default function SignUpForm() {
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
           Submit
+        </Button>
+        <Button type="default" className="mx-2" onClick={leave}>
+          {"Have an account?"}
         </Button>
       </Form.Item>
     </Form>

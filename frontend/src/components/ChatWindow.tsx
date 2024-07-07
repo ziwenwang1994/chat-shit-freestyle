@@ -7,7 +7,6 @@ import ChatItem from "./ChatItem";
 import { BiSend } from "react-icons/bi";
 import httpXhr from "@/http/axios";
 import { Message, Messages } from "../../types";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 function ChatWindow() {
@@ -35,6 +34,7 @@ function ChatWindow() {
         isLoadingChat.current = false;
       });
   }, []);
+  
   function handleSubmit() {
     const content = inputRef.current?.value as string;
     if (!content) return;
